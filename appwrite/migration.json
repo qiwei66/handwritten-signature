@@ -1,0 +1,154 @@
+{
+  "version": "1.0.0",
+  "metadata": {
+    "title": "待办事项应用数据库迁移",
+    "description": "创建待办事项应用所需的数据库表结构",
+    "author": "AI Agent",
+    "created_at": "2025-11-18T00:00:00Z",
+    "database_id": "todo_db"
+  },
+  "changes": {
+    "new_tables": [
+      {
+        "table_id": "todos_table",
+        "name": "待办事项表",
+        "columns": [
+          {
+            "column_id": "col_title",
+            "name": "标题",
+            "action": "create",
+            "data_type": "string"
+          },
+          {
+            "column_id": "col_completed",
+            "name": "完成状态",
+            "action": "create",
+            "data_type": "boolean"
+          },
+          {
+            "column_id": "col_tag",
+            "name": "标签",
+            "action": "create",
+            "data_type": "string"
+          }
+        ],
+        "indexes": [
+          {
+            "index_id": "idx_completed",
+            "name": "完成状态索引",
+            "action": "create",
+            "index_type": "key"
+          },
+          {
+            "index_id": "idx_tag",
+            "name": "标签索引",
+            "action": "create",
+            "index_type": "key"
+          }
+        ]
+      }
+    ],
+    "modified_tables": [],
+    "deleted_tables": []
+  },
+  "operations": [
+    {
+      "type": "create_database",
+      "database_id": "todo_db",
+      "name": "待办事项数据库",
+      "permissions": ["read(\"any\")", "write(\"any\")"]
+    },
+    {
+      "type": "create_table",
+      "database_id": "todo_db",
+      "table_id": "todos_table",
+      "name": "待办事项表",
+      "permissions": ["read(\"any\")", "write(\"any\")"],
+      "row_security": false,
+      "enabled": true
+    },
+    {
+      "type": "create_string_column",
+      "database_id": "todo_db",
+      "table_id": "todos_table",
+      "column_id": "col_title",
+      "key": "title",
+      "name": "标题",
+      "size": 255,
+      "required": true,
+      "default": "",
+      "array": false,
+      "encrypt": false
+    },
+    {
+      "type": "create_boolean_column",
+      "database_id": "todo_db",
+      "table_id": "todos_table",
+      "column_id": "col_completed",
+      "key": "completed",
+      "name": "完成状态",
+      "required": true,
+      "default": false
+    },
+    {
+      "type": "create_string_column",
+      "database_id": "todo_db",
+      "table_id": "todos_table",
+      "column_id": "col_tag",
+      "key": "tag",
+      "name": "标签",
+      "size": 50,
+      "required": false,
+      "default": "",
+      "array": false,
+      "encrypt": false
+    },
+    {
+      "type": "create_index",
+      "database_id": "todo_db",
+      "table_id": "todos_table",
+      "key": "completed",
+      "index_type": "key",
+      "attributes": ["completed"],
+      "columns": ["completed"],
+      "orders": ["ASC"]
+    },
+    {
+      "type": "create_index",
+      "database_id": "todo_db",
+      "table_id": "todos_table",
+      "key": "tag",
+      "index_type": "key",
+      "attributes": ["tag"],
+      "columns": ["tag"],
+      "orders": ["ASC"]
+    },
+    {
+      "type": "create_rows",
+      "database_id": "todo_db",
+      "table_id": "todos_table",
+      "rows": [
+        {
+          "title": "完成项目计划",
+          "completed": false,
+          "tag": "工作"
+        },
+        {
+          "title": "购买生活用品",
+          "completed": true,
+          "tag": "生活"
+        },
+        {
+          "title": "学习新技术",
+          "completed": false,
+          "tag": "学习"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "创建待办事项表，包含标题、完成状态和标签字段",
+    "为完成状态和标签字段创建索引以提高查询性能",
+    "初始化一些示例数据"
+  ]
+}
